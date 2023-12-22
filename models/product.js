@@ -6,16 +6,7 @@ const Products = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
 
   if (skip < 1 || limit < 1) {
-    return res.status(400).send({
-      success: false,
-      message:
-        "Invalid pagination parameters. Skip and limit must be positive integers.",
-    });
-  }
-
-  const offset = parseInt((skip - 1) * limit);
-
-  try {
+ try{
     const result = await client.query(
       `SELECT * FROM products 
         WHERE name ILIKE '%${search}%' AND active = true 
@@ -64,7 +55,7 @@ const updateProducts = async (req, res) => {
   try {
     const result = await client.query(`
         UPDATE products
-        SET name = '${name}', price = ${price}, discount = ${discount}, image = '${image}', active = ${active}, description = '${description}'
+        SET name = '${name}', price = ${price}, discount = ${discount}, active = ${active}, description = '${description}'
         WHERE id = ${id}
         RETURNING *;
       `);
@@ -105,24 +96,7 @@ const deleteProducts = async (req, res) => {
   });
 };
 
-// const upload = (req, res) => {
-//   var uploadedFile;
-//   if (!req.files.foo) {
-//     req.files.foo = "no image";
-//     uploadedFile = req.files.foo;
-//   } else {
-//     uploadedFile = req.files.foo;
-//   }
-//   const filePath = `images/${Date.now() + uploadedFile.name}`;
 
-//   uploadedFile.mv(filePath, (err) => {
-//     if (err) {
-//       return res.status(500).send({ err });
-//     } else {
-//       res.status(200).send("File uploaded");
-//       return filePath;
-//     }
-//   });
-// };
 
 module.exports = { Products, addProducts, updateProducts, deleteProducts };
+}
